@@ -3,9 +3,10 @@ from pygame import *
 init()
 
 window = display.set_mode((700, 500))
+window_news = display.set_mode((700, 500))
 display.set_caption('Labirint')
 
-background_image = transform.scale(image.load('algo.py\дота.jpg'), (700,500))
+background_image = transform.scale(image.load('algo.py\губка.jpg'), (700,500))
 
 class GameSprite(sprite.Sprite):
     def __init__(self, sprite_image, x, y, size_x, size_y):
@@ -60,13 +61,23 @@ class Bullet(GameSprite):
              self.kill()
 
 
+class Chest(GameSprite):
+    def __init__(self, sprite_image, x, y, size_x, size_y):
+        GameSprite.__init__(self, sprite_image, x, y, size_x, size_y)
+    
+    def open(self):
+        new_window = display.set_mode((500, 350))
+        new_window.fill((255, 255, 255))
+        display.set_caption('New Window')
+        display.update()
+
 monster1 = Enemy('algo.py\сквидват.png', 640, 30, 60, 60, 5 )
 monster2 = Enemy('algo.py\сквидват.png', 640, 130, 60, 60, 5 )
-monster3 = Enemy('algo.py\сквидват.png', 640, 230, 60, 60, 5 )
+#monster3 = Enemy('algo.py\сквидват.png', 640, 230, 60, 60, 5 )
 monsters = sprite.Group()
 monsters.add(monster1)
 monsters.add(monster2)
-monsters.add(monster3)
+#monsters.add(monster3)
 
 wall1 = GameSprite('algo.py\мега стена.png',100, 100, 20, 400)
 wall2 = GameSprite('algo.py\мега стена.png',200, 0, 20, 400)
@@ -77,11 +88,13 @@ wall6 = GameSprite('algo.py\мега стена.png',400, 300, 400,20)
 wall7 = GameSprite('algo.py\мега стена.png',320, 400, 300,20)
 
 
-player = Player('algo.py\патрик.jpg', 15, 420, 50, 50, 0, 0)
+player = Player('algo.py\патрик.jpg', 10, 425, 50, 50, 0, 0)
+chest = Chest('algo.py\пуля.jpg' , 350, 425, 50, 50)
 run = True
 finish = False
 
 walls = sprite.Group()
+
 walls.add(wall1)
 walls.add(wall2)
 walls.add(wall3)
@@ -95,6 +108,14 @@ bullets = sprite.Group()
 def game_over():
     game_over_image = transform.scale(image.load('algo.py\мега стена.png'), (700, 500))
     window.blit(game_over_image, (0, 0))
+    player.speed_x = 0
+    player.speed_y = 0
+    finish = True
+
+def win():
+
+    win_image = transform.scale(image.load('algo.py\чкч.jpg'), (700, 500))
+    window.blit(win_image, (0, 0))
     player.speed_x = 0
     player.speed_y = 0
     finish = True
@@ -118,6 +139,7 @@ while run:
                 player.speed_x = 5
             elif e.key == K_SPACE:
                 player.fire()
+            
 
         elif e.type == KEYUP:
             if e.key == K_w:
@@ -136,25 +158,33 @@ while run:
         monsters.draw(window)
         bullets.draw(window)
         player.reset()
+        chest.reset()
         player.update()
         bullets.update()
+         
 
         sprite.groupcollide(monsters, bullets, True, True)
         sprite.groupcollide(walls, bullets, False, True)
         if (player.rect.x >= 700 or player.rect.x <= 0) or (player.rect.y >= 500 or player.rect.y <= 0):
-            game_over()
+            player.rect.x = 10 
+            player.rect.y = 425
             
 
+        if 340 <= player.rect.x == 360 and 400 <= player.rect.y >= 415:
+            win()
         
+
         if sprite.spritecollide(player, walls, False):
-            player.speed_x = 0
-            player.speed_y = 0
-            game_over()
+            player.rect.x = 10 
+            player.rect.y = 425 
+            #game_over()
+
+        if sprite.spritecollide(player, monsters, False):
+            player.rect.x = 10 
+            player.rect.y = 425 
         
-        if sprite.spritecollide(player, walls, False):
-            player.speed_x = 0
-            player.speed_y = 0
-            game_over()
+       
+       
         
 
 
