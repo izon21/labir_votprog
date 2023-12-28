@@ -118,7 +118,7 @@ def game_over():
 
 def win():
 
-    win_image = transform.scale(image.load('algo.py\чкч.jpg'), (700, 500))
+    win_image = transform.scale(image.load('algo.py\фон.jpg'), (700, 500))
     window.blit(win_image, (0, 0))
     player.speed_x = 0
     player.speed_y = 0
