@@ -18,6 +18,8 @@ class GameSprite(sprite.Sprite):
 
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
+    
+    
 
 class Player(GameSprite):
     def __init__(self, sprite_image, x, y, size_x, size_y, speed_x, speed_y):
@@ -32,7 +34,9 @@ class Player(GameSprite):
     def fire(self):
         bullet = Bullet('algo.py\пуля.jpg', self.rect.right, self.rect.centery, 20,10, 15)
         bullets.add(bullet)
-
+    def fire1(self):
+        bullet = Bullet('algo.py\пуля.jpg', self.rect.left, self.rect.centery, 20,10, -15)
+        bullets.add(bullet)
 
 class Enemy(GameSprite):
     side = 'left'
@@ -73,11 +77,11 @@ class Chest(GameSprite):
 
 monster1 = Enemy('algo.py\сквидват.png', 640, 30, 60, 60, 5 )
 monster2 = Enemy('algo.py\сквидват.png', 640, 130, 60, 60, 5 )
-#monster3 = Enemy('algo.py\сквидват.png', 640, 230, 60, 60, 5 )
+monster3 = Enemy('algo.py\сквидват.png', 640, 230, 60, 60, 5 )
 monsters = sprite.Group()
 monsters.add(monster1)
 monsters.add(monster2)
-#monsters.add(monster3)
+monsters.add(monster3)
 
 wall1 = GameSprite('algo.py\мега стена.png',100, 100, 20, 400)
 wall2 = GameSprite('algo.py\мега стена.png',200, 0, 20, 400)
@@ -137,9 +141,10 @@ while run:
                 player.speed_x = -5
             elif e.key == K_d:
                 player.speed_x = 5
-            elif e.key == K_SPACE:
+            elif e.key == K_RIGHT:
                 player.fire()
-            
+            elif e.key == K_LEFT:
+                player.fire1()
 
         elif e.type == KEYUP:
             if e.key == K_w:
